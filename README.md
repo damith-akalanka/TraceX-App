@@ -115,7 +115,7 @@ TraceX/
 │   │   │   ├── geofence/        # Boundary checking & breach dispatchers
 │   │   │   └── tracking/        # Live coordinates ingestion pipeline
 │   │   ├── sockets/             # Socket event emitters and listeners
-│   │   └── index.ts             # Server entry point
+│   │   └── app.ts             # Server entry point
 │   └── package.json
 │
 ├── docs/                        # 📚 Architecture diagrams and design assets
