@@ -108,18 +108,67 @@ TraceX/
 │       │   └── lib/             # API client and WebSocket handlers
 │       └── package.json
 │
-├── server/                      # ⚙️ Node.js Geospatial Backend Engine
+├── server/                         # ⚙️ Node.js Geospatial Backend Engine
 │   ├── src/
-│   │   ├── modules/
-│   │   │   ├── auth/            # Authentication & session verification
-│   │   │   ├── geofence/        # Boundary checking & breach dispatchers
-│   │   │   └── tracking/        # Live coordinates ingestion pipeline
-│   │   ├── sockets/             # Socket event emitters and listeners
-│   │   └── app.ts             # Server entry point
-│   └── package.json
+│   │   ├── config/                 # Environment variables & external service configurations
+│   │   │   ├── env.ts              # Zod / dotenv environment validation
+│   │   │   └── firebase.ts         # Firebase Admin SDK init
+│   │   │
+│   │   ├── db/                     # 🗄️ Enterprise Database Layer (Sequelize)
+│   │   │   ├── hooks/              # Model lifecycle hooks (beforeCreate, afterUpdate)
+│   │   │   │   └── index.ts        # Central hooks registry
+│   │   │   ├── migrations/         # Database migration files
+│   │   │   ├── models/             # Sequelize Data Schemas
+│   │   │   │   ├── Admin.ts            # Admin identity & credentials
+│   │   │   │   ├── AdminRefreshToken.ts # JWT refresh token persistence
+│   │   │   │   ├── Device.ts           # Tracker pairing & device metadata
+│   │   │   │   ├── Location.ts         # Coordinates telemetry schema (TraceX addition)
+│   │   │   │   └── index.ts            # Models aggregation & re-export
+│   │   │   ├── relationships/      # Model Associations & Constraints
+│   │   │   │   ├── InitRelationShip.ts # Foreign keys & relations definition
+│   │   │   │   └── index.ts            # Relationships initialization caller
+│   │   │   ├── scripts/            # Database utility scripts
+│   │   │   │   └── rollback.ts         # Migration rollback / schema reset script
+│   │   │   ├── index.ts            # Central database export entry point
+│   │   │   ├── sequelize.ts        # Sequelize PostgreSQL client initialization
+│   │   │   └── type.ts             # Global TypeScript DB attributes & creation types
+│   │   │
+│   │   ├── modules/                # Feature-based business logic (Clean Architecture)
+│   │   │   ├── auth/               # Admin authentication & device pair code logic
+│   │   │   │   ├── auth.controller.ts  # Register, login, refresh token, pair code handlers
+│   │   │   │   ├── auth.routes.ts      # /api/auth endpoint router
+│   │   │   │   └── auth.middleware.ts  # JWT access token protection
+│   │   │   ├── tracking/           # Real-time telemetry ingestion & history
+│   │   │   │   ├── tracking.controller.ts # Telemetry query & history fetching
+│   │   │   │   └── tracking.routes.ts     # /api/tracking endpoints
+│   │   │   └── geofence/           # Geofence boundary checking (Post-MVP)
+│   │   │       ├── geofence.controller.ts # Geofence creation & listing
+│   │   │       ├── geofence.service.ts    # Ray-casting & point-in-polygon math
+│   │   │       └── geofence.routes.ts     # /api/geofence endpoints
+│   │   │
+│   │   ├── sockets/                # Real-Time WebSocket Infrastructure
+│   │   │   └── tracking.socket.ts  # Private Admin rooms & sub-second location relays
+│   │   │
+│   │   ├── routes/                 # Root Router Aggregator
+│   │   │   └── index.ts            # Express router combining /auth, /tracking, /geofence
+│   │   │
+│   │   ├── utils/                  # Reusable helper functions
+│   │   │   ├── asyncHandler.ts     # Async error-wrapping utilities & AppError class
+│   │   │   └── geoUtils.ts         # Distance calculation & coordinate formatters
+│   │   │
+│   │   └── app.ts                  # Server entry point (Express + HTTP + Socket.io)
+│   │
+│   ├── .env.example                # Sample environment variables
+│   ├── tsconfig.json               # TypeScript compiler config
+│   └── package.json                # Dependencies, migrations & dev scripts
 │
-├── docs/                        # 📚 Architecture diagrams and design assets
-└── README.md
+├── docs/                           # 📚 Architecture diagrams & Open-Source docs
+│   ├── architecture.png            # High-level architecture diagram
+│   ├── data-flow.png               # WebSocket & PostGIS telemetry pipeline diagram
+│   └── api-spec.md                 # REST API endpoints & Socket payload specs
+│
+├── .gitignore                      # Git ignored files & node_modules
+└── README.md                       # Comprehensive project showcase for recruiters
 ```
 
 ---
